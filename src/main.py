@@ -1,5 +1,6 @@
 from enum import Enum
 import random
+from typing import List
 
 
 class PlayColor(Enum):
@@ -44,12 +45,20 @@ class PlayDeck:
         hands = [sorted(hand, key=lambda x: (x.number, x.color.value)) for hand in hands]
         return hands
 
+class User:
+    def __init__(self, hand: List["PlayCard"]):
+        self.hand = hand
+    def __repr__(self):
+        return ",".join([str(card) for card in self.hand])
+
 class GameMaster:
-    def __init__(self):
-        deck = PlayDeck()
-        hands = deck.distribute(2)
-        print(hands)
-            
+    def __init__(self, player: int):
+        if player < 2 or player > 4:
+            raise ValueError('Invalid number of players')
+        self.player = player
+        self.deck = PlayDeck()
+        self.users = [User(hand) for hand in self.deck.distribute(self.player)]
 
 if __name__ == "__main__":
-    master = GameMaster()
+    master = GameMaster(2)
+    print([user for user in master.users])
