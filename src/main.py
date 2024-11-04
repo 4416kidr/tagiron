@@ -1,4 +1,5 @@
 from enum import Enum
+import random
 
 
 class PlayColor(Enum):
@@ -31,7 +32,24 @@ class PlayDeck:
         self.cards.append(PlayCard(PlayColor.GREEN, 5))
         self.cards.append(PlayCard(PlayColor.GREEN, 5))
         self.cards = sorted(self.cards, key=lambda x: x.number)
+    def distribute(self, player: int):
+        if player < 2 or player > 4:
+            raise ValueError('Invalid number of players')
+        temp_deck = self.cards[:]
+        random.shuffle(temp_deck)
+        hands = [[] for _ in range(player)]
+        for _ in range(5):
+            for i in range(player):
+                hands[i].append(temp_deck.pop(0))
+        hands = [sorted(hand, key=lambda x: (x.number, x.color.value)) for hand in hands]
+        return hands
+
+class GameMaster:
+    def __init__(self):
+        deck = PlayDeck()
+        hands = deck.distribute(2)
+        print(hands)
+            
 
 if __name__ == "__main__":
-    deck = PlayDeck()
-    print(deck.cards)
+    master = GameMaster()
