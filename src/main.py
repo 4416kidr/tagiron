@@ -11,6 +11,7 @@ class PlayCard:
         self.color = color
         self.number = number
         self.validate()
+    
     def validate(self):
         if isinstance(self.color, PlayColor) == False and isinstance(self.number, int) == False:
             raise ValueError('Invalid type')
@@ -18,6 +19,9 @@ class PlayCard:
             raise ValueError('Number must be between 0 and 9')
         if self.color == PlayColor.GREEN and self.number != 5:
             raise ValueError('Green cards must have number 5')
+    
+    def __repr__(self):
+        return f"{self.color.name[0]}{self.number}"
 
 class PlayDeck:
     def __init__(self):
@@ -26,6 +30,7 @@ class PlayDeck:
         ]
         self.cards.append(PlayCard(PlayColor.GREEN, 5))
         self.cards.append(PlayCard(PlayColor.GREEN, 5))
+        self.cards = sorted(self.cards, key=lambda x: x.number)
 
 if __name__ == "__main__":
     deck = PlayDeck()
